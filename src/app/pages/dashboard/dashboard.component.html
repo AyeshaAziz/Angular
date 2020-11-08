@@ -102,45 +102,47 @@
               <h2 class="text-white mb-0">Covid19 Statistics</h2>
             </div>
             <div class="map-selection-container">
-              <mat-form-field> 
+              <mat-form-field *ngIf="chartOptions">
                 <mat-label>Select a chart type</mat-label>
                 <mat-select [(ngModel)]="selectedChartType" (ngModelChange)="notifyChartOptionsUpdated()">
-                  <mat-option *ngFor="let option of chartData" value="{{option.type}}">{{option.label}}</mat-option>
+                  <mat-option *ngFor="let option of chartOptions" value="{{option.type}}">{{option.label}}</mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field>
+              <mat-form-field *ngIf="countryOptions">
                 <mat-label>Select a country</mat-label>
                 <mat-select [(ngModel)]="selectedCountry" (ngModelChange)="notifyChartOptionsUpdated()">
-                  <mat-option *ngFor="let option of countryData" value="{{option.type}}">{{option.label}}</mat-option>
+                  <mat-option *ngFor="let option of countryOptions" value="{{option.type}}">{{option.label}}
+                  </mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
           </div>
         </div>
         <div class="card-body">
-          <app-covid19 [chartTypeSubject]="chartTypeSubject" [selectedCountrySubject]="selectedCountrySubject"></app-covid19>
+          <app-covid19 [chartTypeSubject]="chartTypeSubject" [selectedCountrySubject]="selectedCountrySubject">
+          </app-covid19>
         </div>
       </div>
     </div>
-    <div class="col-xl-4">
+    <!-- <div class="col-xl-4">
       <div class="card shadow full-height">
         <div class="card-header bg-transparent">
           <div class="row align-items-center">
-            <div class="col">
-              <!-- <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
+            <div class="col"> -->
+    <!-- <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
               <h2 class="mb-0">Covid19 Statistics - United Kingdom</h2> -->
-            </div>
+    <!-- </div>
             
           </div>
-        </div>
-        <div class="card-body">
-          <!-- Chart -->
+        </div> -->
+    <!-- <div class="card-body">
+          
           <div class="chart">
             <canvas id="chart-orders" class="chart-canvas"></canvas>
           </div>
-        </div>
-      </div>
-    </div>
+        </div> -->
+    <!-- </div>
+    </div> -->
   </div>
   <div class="row mt-5">
     <div class="col-xl-8 mb-5 mb-xl-0">
@@ -277,7 +279,8 @@
                     <span class="mr-2">60%</span>
                     <div>
                       <div class="progress">
-                        <div class="progress-bar bg-gradient-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
+                        <div class="progress-bar bg-gradient-danger" role="progressbar" aria-valuenow="60"
+                          aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
                       </div>
                     </div>
                   </div>
@@ -295,7 +298,8 @@
                     <span class="mr-2">70%</span>
                     <div>
                       <div class="progress">
-                        <div class="progress-bar bg-gradient-success" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 70%;"></div>
+                        <div class="progress-bar bg-gradient-success" role="progressbar" aria-valuenow="70"
+                          aria-valuemin="0" aria-valuemax="100" style="width: 70%;"></div>
                       </div>
                     </div>
                   </div>
@@ -313,7 +317,8 @@
                     <span class="mr-2">80%</span>
                     <div>
                       <div class="progress">
-                        <div class="progress-bar bg-gradient-primary" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%;"></div>
+                        <div class="progress-bar bg-gradient-primary" role="progressbar" aria-valuenow="80"
+                          aria-valuemin="0" aria-valuemax="100" style="width: 80%;"></div>
                       </div>
                     </div>
                   </div>
@@ -331,7 +336,8 @@
                     <span class="mr-2">75%</span>
                     <div>
                       <div class="progress">
-                        <div class="progress-bar bg-gradient-info" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%;"></div>
+                        <div class="progress-bar bg-gradient-info" role="progressbar" aria-valuenow="75"
+                          aria-valuemin="0" aria-valuemax="100" style="width: 75%;"></div>
                       </div>
                     </div>
                   </div>
@@ -349,7 +355,8 @@
                     <span class="mr-2">30%</span>
                     <div>
                       <div class="progress">
-                        <div class="progress-bar bg-gradient-warning" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%;"></div>
+                        <div class="progress-bar bg-gradient-warning" role="progressbar" aria-valuenow="30"
+                          aria-valuemin="0" aria-valuemax="100" style="width: 30%;"></div>
                       </div>
                     </div>
                   </div>

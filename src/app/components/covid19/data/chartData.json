@@ -1,0 +1,17 @@
+{
+    "data": 
+    [
+        {
+            "type": "bar",
+            "label": "Bar Chart"
+        },
+        {
+            "type": "pie",
+            "label": "Pie Chart"
+        },
+        {
+            "type": "line",
+            "label": "Line Chart"
+        }
+    ]
+}

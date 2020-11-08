@@ -1,20 +1,21 @@
-import { Component, OnInit, Input, EventEmitter } from '@angular/core';
-import { DataService } from './covid19-data.service';  
-import { SummaryData, CountryData} from './models/covid-data-model';
-import Chart from 'chart.js';
-
-// core components
 import {
-  chartOptions,
-  parseOptions,
-  chartExample1,
-  chartExample2
-} from "../../variables/charts";
-import { Subject } from 'rxjs';
-
-const chartTypes: string[] = ['pie', 'line', 'bar'];
-const countries: string[] = ['GB', 'GLOBAL'];
-
+  Component,
+  OnInit,
+  Input
+} from '@angular/core';
+import {
+  DataService
+} from './covid19-data.service';
+import {
+  SummaryData,
+  CountryData
+} from './models/covid-data-model';
+import Chart from 'chart.js';
+import {
+  Subject
+} from 'rxjs';
+import chartData from '../../components/covid19/data/chartData.json';
+import countryData from '../../components/covid19/data/countryData.json';
 
 @Component({
   selector: 'app-covid19',
@@ -22,9 +23,11 @@ const countries: string[] = ['GB', 'GLOBAL'];
   styleUrls: ['./covid19.component.scss']
 })
 export class Covid19Component implements OnInit {
-  @Input() chartTypeSubject: Subject<string>;
-  @Input() selectedCountrySubject: Subject<string>;
+  @Input() chartTypeSubject: Subject < string > ;
+  @Input() selectedCountrySubject: Subject < string > ;
 
+  chartTypes: string[] = [''];
+  countries: string[] = [''];
   chartType: string;
   summaryData: SummaryData;
   selectedCountry: string;
@@ -33,20 +36,23 @@ export class Covid19Component implements OnInit {
   dataSets: SummaryData[];
   allData: any;
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
-    if(!this.chartType) {
-      this.chartType = chartTypes[2];
+    this.chartTypes = chartData.data.map(chart => chart.type);
+    this.countries = countryData.data.map(country => country.type);
+
+    if (!this.chartType) {
+      this.chartType = this.chartTypes[0];
     }
 
-    if(!this.selectedCountry) {
-      this.selectedCountry = countries[1];
+    if (!this.selectedCountry) {
+      this.selectedCountry = this.countries[3];
     }
 
-    this.dataService.getData().subscribe( response => {
+    this.dataService.getData().subscribe(response => {
       this.allData = response;
-      this.dataSets = [this.allData?.Global];
+      this.dataSets = [this.allData ? this.allData.Global: {}];
       this.summaryData = this.dataSets[0];
       this.populateChartData();
     });
@@ -63,17 +69,16 @@ export class Covid19Component implements OnInit {
 
       this.chartType = type;
       this.populateChartData();
-      // this.switchChart(this.summaryData);
 
-     });
+    });
   }
 
-  populateChartData(): void{
-    if (this.selectedCountry === countries[0]) {
-      this.selectedCountryData = this.allData.Countries.find(x => 
+  populateChartData(): void {
+    if (this.selectedCountry === this.countries[0]) {
+      this.selectedCountryData = this.allData.Countries.find(x =>
         x.CountryCode === this.selectedCountry);
       this.switchChart(this.selectedCountryData);
-    } else {  
+    } else {
       this.switchChart(this.summaryData);
     }
   }
@@ -82,29 +87,28 @@ export class Covid19Component implements OnInit {
     const letters = '0123456789ABCDEF';
     let color = '#';
 
-    for (let i = 0; i < 6; i++ ) {
-        color += letters[Math.floor(Math.random() * 16)];
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
-  } 
+  }
 
   getChartColours(length): string[] {
     let chartColours = [];
-    for (let i = 0; i < length; i++ ) {
+    for (let i = 0; i < length; i++) {
       chartColours.push(this.getRandomColor());
+    }
+    return chartColours;
   }
-  return chartColours;
-  }
-  
+
   switchChart(data: any): void {
     let config: any;
     const covid19ChartReference = 'covid19-chart';
     const covidChart = document.getElementById(covid19ChartReference);
 
-    if (this.chartType === chartTypes[0]) {
+    if (this.chartType === this.chartTypes[0]) {
       config = this.configurePieChart(data);
-    } 
-    else {
+    } else {
       config = this.configureChart(data);
     }
     this.createChart(covidChart, config, this.chartType);
@@ -117,7 +121,7 @@ export class Covid19Component implements OnInit {
         legend: {
           display: false,
           labels: {
-              fontColor: this.getRandomColor()
+            fontColor: this.getRandomColor()
           }
         }
       },
@@ -134,34 +138,34 @@ export class Covid19Component implements OnInit {
 
   configureChart(data: SummaryData) {
     return {
-        options: {
-          legend: {
-            display: false,
-            labels: {
-                fontColor: this.getRandomColor()
-            }
-        },
-          scales: {
-            yAxes: [{
-              ticks: {
-                callback: (value) => {
-                  if (!(value % 10)) {
-                    return value;
-                  }
-                }
-              }
-            }]
+      options: {
+        legend: {
+          display: false,
+          labels: {
+            fontColor: this.getRandomColor()
           }
         },
-        data: {
-          labels: Object.keys(data),
-          datasets: [{
-            // label: Object.keys(data),
-            data: Object.values(data),
-            backgroundColor: this.getChartColours(Object.keys(data).length)
+        scales: {
+          yAxes: [{
+            ticks: {
+              callback: (value) => {
+                if (!(value % 10)) {
+                  return value;
+                }
+              }
+            }
           }]
         }
+      },
+      data: {
+        labels: Object.keys(data),
+        datasets: [{
+          // label: Object.keys(data),
+          data: Object.values(data),
+          backgroundColor: this.getChartColours(Object.keys(data).length)
+        }]
       }
+    }
   }
 
   createChart(covidChartRef, config, type): void {

@@ -1,13 +1,13 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
-
-// core components
 import {
-  chartOptions,
-  parseOptions,
-  chartExample1,
-  chartExample2
-} from "../../variables/charts";
-import { Subject } from 'rxjs';
+  Component,
+  OnInit
+} from '@angular/core';
+import {
+  Subject
+} from 'rxjs';
+import chartData from '../../components/covid19/data/chartData.json';
+import countryData from '../../components/covid19/data/countryData.json';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -15,38 +15,23 @@ import { Subject } from 'rxjs';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  chartData = [{
-    'type': 'bar',
-    'label': 'Bar Chart',
-  },
-  {
-    'type': 'pie',
-    'label': 'Pie Chart',
-  },
-  {
-    'type': 'line',
-    'label': 'Line Chart',
-  }];
 
-  countryData = [{
-    'type': 'GB',
-    'label': 'United Kingdom',
-  },
-  {
-    'type': 'GLOBAL',
-    'label': 'Global',
-  }];
-
-  chartType: string; 
+  chartType: string;
   country: string;
-  selectedCountry: string = this.countryData[0].type;
-  selectedChartType: string = this.chartData[0].type;
-  chartTypeSubject: Subject<string> = new Subject();
-  selectedCountrySubject: Subject<string> = new Subject();
+  chartOptions: any;
+  countryOptions: any;
+  selectedCountry: string;
+  selectedChartType: string;
+  chartTypeSubject: Subject < string > = new Subject();
+  selectedCountrySubject: Subject < string > = new Subject();
 
   constructor() {}
 
   ngOnInit(): void {
+    this.selectedCountry = countryData.data[0].type;
+    this.selectedChartType = chartData.data[0].type;
+    this.chartOptions = chartData.data;
+    this.countryOptions = countryData.data;
     this.chartType = this.selectedChartType;
     this.country = this.selectedCountry;
   }
@@ -55,9 +40,5 @@ export class DashboardComponent implements OnInit {
     this.chartTypeSubject.next(this.selectedChartType);
     this.selectedCountrySubject.next(this.selectedCountry);
   }
-
-  // countryChanged() {
-  //   this.selectedCountrySubject.next(this.selectedCountry);
-  // }
 
 }

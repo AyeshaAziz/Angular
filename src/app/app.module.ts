@@ -28,7 +28,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   declarations: [
     AppComponent,
     AdminLayoutComponent,
-    AuthLayoutComponent,
+    // AuthLayoutComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]
